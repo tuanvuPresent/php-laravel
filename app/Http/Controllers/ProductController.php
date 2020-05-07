@@ -6,11 +6,19 @@ use App\Http\Requests\ProductRequest;
 use App\Product;
 use App\TypeProduct;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Validator;
 
 class ProductController extends Controller
 {
+    private function custom_response($data = null, $message = 'success')
+    {
+        return response()->json([
+            'status' => true,
+            'message' => $message,
+            'data' => $data
+        ]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -18,17 +26,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
-        $product = DB::table('products')
-            ->join('type_products', 'products.type_products_id', '=', 'type_products.type_products_id')
-            ->select('products.*')
-            ->get();
-
-        return response()->json([
-            'status' => true,
-            'message' => 'success',
-            'data' => $product
-        ]);
+        $product = Product::with('type_products:id,name')->get();
+        return $this->custom_response($product);
     }
 
     /**
@@ -66,14 +65,14 @@ class ProductController extends Controller
 //            ];
 //        }
         //
-        $nameProduct = $request->get('type_products_id');
+        $nameProduct = $request->get('type_products');
         $typeProduct = TypeProduct::firstOrNew(['name' => $nameProduct]);
         $typeProduct->save();
 
-        $request['type_products_id'] = $typeProduct->id ? $typeProduct->id : $typeProduct->type_products_id;
+        $request['type_products_id'] = $typeProduct->id;
         $product = Product::create($request->all());
 
-        return response()->json($product);
+        return $this->custom_response($product, 'create success');
     }
 
     /**
@@ -84,9 +83,8 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        //
-        $product = Product::findOrFail($id);
-        return response()->json($product);
+        $product = Product::with('type_products:id,name')->findOrFail($id);
+        return $this->custom_response($product);
     }
 
     /**
@@ -111,15 +109,15 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
         if ($product) {
-            $nameProduct = $request->get('type_products_id');
+            $nameProduct = $request->get('type_products');
             $typeProduct = TypeProduct::firstOrNew(['name' => $nameProduct]);
             $typeProduct->save();
 
-            $request['type_products_id'] = $typeProduct->id ? $typeProduct->id : $typeProduct->type_products_id;
+            $request['type_products_id'] = $typeProduct->id;
             $product->update($request->all());
         }
 
-        return response()->json($product);
+        return $this->custom_response($product, 'update success');
     }
 
     /**
@@ -130,8 +128,7 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
-        Product::destroy($id);
-        return response()->json('delete success');
+        Product::findOrFail($id)->delete();
+        return $this->custom_response(null, 'delete success');
     }
 }

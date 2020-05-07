@@ -38,3 +38,7 @@ Route::get('auth/logout', 'AuthenticationController@logout')
 Route::post('auth/login', 'AuthenticationController@login');
 
 Route::resource('products', 'ProductController');
+
+Route::get('upload', 'UploadController@index');
+Route::post('upload', 'UploadController@store');
+Route::delete('upload', 'UploadController@destroy');

@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Http\Request;
 use App\Article;
+use Illuminate\Http\Request;
 
 class ArticleController extends Controller
 {
