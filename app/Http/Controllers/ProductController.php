@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductRequest;
 use App\Product;
 use App\TypeProduct;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Validator;
 
 class ProductController extends Controller
@@ -46,6 +48,7 @@ class ProductController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
+
     public function store(ProductRequest $request)
     {
 //        $rules = array(
@@ -65,14 +68,16 @@ class ProductController extends Controller
 //            ];
 //        }
         //
-        $nameProduct = $request->get('type_products');
-        $typeProduct = TypeProduct::firstOrNew(['name' => $nameProduct]);
-        $typeProduct->save();
+        return DB::transaction(function () use ($request) {
+            $nameProduct = $request->get('type_products');
+            $typeProduct = TypeProduct::firstOrNew(['name' => $nameProduct]);
+            $typeProduct->save();
 
-        $request['type_products_id'] = $typeProduct->id;
-        $product = Product::create($request->all());
+            $request['type_products_id'] = $typeProduct->id;
+            $product = Product::create($request->all());
 
-        return $this->custom_response($product, 'create success');
+            return $this->custom_response($product, 'create success');
+        });
     }
 
     /**
