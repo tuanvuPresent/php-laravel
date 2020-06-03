@@ -20,3 +20,4 @@ Route::get('/', function () {
 Route::resource('test', 'TestController');
 //Route::get('test', 'TestController@create');
 //Route::post('test', 'TestController@store');
+Route::resource('books', 'BookController');

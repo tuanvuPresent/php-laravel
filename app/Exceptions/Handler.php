@@ -52,20 +52,20 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
-        if ($exception instanceof ModelNotFoundException) {
-            $message = 'Entry for ' . str_replace('App\\', '', $exception->getModel()) . ' not found';
-        } else if ($exception instanceof RequestException) {
-            $message = 'External API call failed.';
-        } else {
-            $message = $exception->getMessage();
-        }
-
-        $response = [
-            'status' => false,
-            'message' => $message
-        ];
-
-        return response()->json($response, 400);
-//        return parent::render($request, $exception);
+//        if ($exception instanceof ModelNotFoundException) {
+//            $message = 'Entry for ' . str_replace('App\\', '', $exception->getModel()) . ' not found';
+//        } else if ($exception instanceof RequestException) {
+//            $message = 'External API call failed.';
+//        } else {
+//            $message = $exception->getMessage();
+//        }
+//
+//        $response = [
+//            'status' => false,
+//            'message' => $message
+//        ];
+//
+//        return response()->json($response, 400);
+        return parent::render($request, $exception);
     }
 }
