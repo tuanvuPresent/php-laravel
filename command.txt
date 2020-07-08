@@ -1,11 +1,17 @@
-php artisan serve
+# make
 php artisan make:model Article -m
 php artisan make:controller ArticleController
 php artisan make:request ArticleController
 php artisan make:middleware ArticleController
 
+# clear
 php artisan route:cache
 php artisan cache:clear
 php artisan config:cache
 php artisan view:clear
 php artisan optimize
+
+# run
+php artisan migrate
+php artisan db:seed
+php artisan serve
