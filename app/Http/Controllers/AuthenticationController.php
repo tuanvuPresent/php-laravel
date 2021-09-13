@@ -18,6 +18,26 @@ class AuthenticationController extends Controller
         }
     }
 
+     /**
+     * @SWG\Post(
+     *     path="/api/auth/login",
+     *     description="Return a user's first and last name",
+     *     @SWG\Parameter(
+     *         name="body",
+     *         in="body",
+     *         type="string",
+     *         required=true,
+     *         @SWG\Schema(
+     *            @SWG\Property(property="email", type="string", example="email@example.com"),
+     *            @SWG\Property(property="password", type="string", example="string"),
+     *         ),
+     *     ),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="OK",
+     *     ),
+     * )
+     */
     public function login(Request $request)
     {
         $email = $request->input('email');
