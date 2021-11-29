@@ -6,6 +6,7 @@ services:
     build: .
     volumes:
       - ./:/usr/src/app/
+      - ./php-fpm.conf:/etc/php-fpm.d
     ports:
       - "8220:9000"
 
