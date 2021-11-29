@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  mbo-test-web:
+    restart: always
+    build: .
+    volumes:
+      - ./:/usr/src/app/
+    ports:
+      - "8220:9000"
+
+  mbo-test-nginx:
+    restart: always
+    build: nginx/
+    volumes:
+      - ./:/usr/src/app/
+      - ./nginx:/etc/nginx/conf.d
+    ports:
+      - "8123:80"

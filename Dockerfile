@@ -1,0 +1,14 @@
+FROM php:8.0-fpm
+# set work directory
+WORKDIR /usr/src/app
+
+# copy project
+COPY . /usr/src/app/
+
+# install dependencies
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+RUN php composer-setup.php
+RUN php -r "unlink('composer-setup.php');"
+RUN mv composer.phar /usr/local/bin/composer
+
+ENTRYPOINT ["sh", "/usr/src/app/run.sh"]
