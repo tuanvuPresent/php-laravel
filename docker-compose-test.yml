@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  mbo-test-web:
+  test-web:
     restart: always
     build: .
     volumes:
@@ -10,7 +10,7 @@ services:
     ports:
       - "8220:9000"
 
-  mbo-test-nginx:
+  test-nginx:
     restart: always
     build: nginx/
     volumes:
