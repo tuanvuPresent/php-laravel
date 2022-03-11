@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\Example;
 
-use App\Repositories\RepositoryInterface;
 use App\Example;
 
-abstract class BaseRepository implements RepositoryInterface
+class ExampleRepository implements IExampleRepository
 {
     public function getAll()
     {
