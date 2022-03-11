@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Example;
 use App\Http\Requests\ExamplePostRequest;
 use App\Http\Requests\ExamplePutRequest;
 use App\Http\Resources\ExampleGetListResource;
 use App\Http\Resources\ExampleGetResource;
-use Illuminate\Http\Request;
+use App\Repositories\Example\IExampleRepository;
 use Illuminate\Support\Facades\DB;
 
 class ExampleController extends Controller
 {
     use ApiResponse;
-
+    protected $exampleRepository;
+    public function __construct(IExampleRepository $exampleRepository)
+    {
+        $this->exampleRepository = $exampleRepository;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -22,7 +25,7 @@ class ExampleController extends Controller
     public function index()
     {
         //
-        $examples = Example::all();
+        $examples = $this->exampleRepository->getAll();
         return $this->responseSuccess(ExampleGetListResource::collection($examples));
     }
 
@@ -41,12 +44,12 @@ class ExampleController extends Controller
      *
      * @param ExamplePostRequest $request
      * @return \Illuminate\Http\Response
-//     */
+    //     */
     public function store(ExamplePostRequest $request)
     {
         //
         return DB::transaction(function () use ($request) {
-            $example = Example::create($request->all());
+            $example = $this->exampleRepository->create($request->all());
             return $this->responseSuccess($example);
         });
     }
@@ -60,7 +63,7 @@ class ExampleController extends Controller
     public function show($id)
     {
         //
-        $example = Example::find($id);
+        $example = $this->exampleRepository->find($id);
         if (!$example) {
             return $this->responseError(null, 'Not found');
         }
@@ -87,13 +90,10 @@ class ExampleController extends Controller
      */
     public function update(ExamplePutRequest $request, $id)
     {
-        //
-        $example = Example::find($id);
+        $example = $this->exampleRepository->update($id, $request->all());
         if (!$example) {
             return $this->responseError(null, 'Not found');
         }
-        $example->update($request->all());
-
         return $this->responseSuccess($example);
     }
 
@@ -105,11 +105,7 @@ class ExampleController extends Controller
      */
     public function destroy($id)
     {
-        //
-        $example = Example::find($id);
-        if ($example) {
-            $example->delete();
-        }
+        $this->exampleRepository->delete($id);
         return $this->responseSuccess();
     }
 }
