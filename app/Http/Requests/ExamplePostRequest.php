@@ -2,10 +2,14 @@
 
 namespace App\Http\Requests;
 
+use App\Http\Controllers\ApiResponse;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class ExamplePostRequest extends FormRequest
 {
+    use ApiResponse;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -13,7 +17,7 @@ class ExamplePostRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return false;
     }
 
     /**
@@ -27,5 +31,11 @@ class ExamplePostRequest extends FormRequest
             'title' => 'required',
             'content' => 'required',
         ];
+    }
+
+
+    protected function failedValidation($validator)
+    {
+        throw new HttpResponseException($this->responseError($validator->errors()));
     }
 }
