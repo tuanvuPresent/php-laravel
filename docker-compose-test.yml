@@ -18,3 +18,18 @@ services:
       - ./nginx:/etc/nginx/conf.d
     ports:
       - "8123:80"
+  db:
+    command:
+      --default-authentication-plugin=mysql_native_password
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_0900_as_cs
+    container_name: mysql-local-example
+    image: mysql
+    environment:
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+    ports:
+      - ${DB_PORT}:3306
+    restart: always
