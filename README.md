@@ -101,4 +101,30 @@ step 4: Run
 - server: 0.0.0.0:8000
 - phpmyadmin: 0.0.0.0:8088
 
+---
+
+## Jobs queue
+> Laravel 6.x trở nên thì QUEUE_DRIVER đổi thành QUEUE_CONNECTION
+
+1. sync
+```angular2html
+Queue sync là queue mà dùng như không dùng. 
+Các job khi đưa vào queue sẽ được thực hiện ngay lập tức. 
+Cũng có thể hiểu, khi cấu hình queue driver là sync tức là bạn đã tắt queue trong Laravel.
+```
+
+2. database
+```
+php artisan queue:table
+php artisan migrate
+QUEUE_DRIVER=database or QUEUE_CONNECTION=database
+```
+3. redis
+```
+Redis là một dạng database lưu trữ trên RAM, đặc điểm của nó là tốc độ đọc – ghi rất nhanh, rất phù hợp để làm nơi lưu trữ các job của queue.
+```
+- command
+```
+php artisan queue:work
+```
 
